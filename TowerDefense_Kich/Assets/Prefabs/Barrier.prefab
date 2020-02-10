@@ -107,5 +107,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: 1
+  buildingName: Barrier
   cost: 5
   sell: 1

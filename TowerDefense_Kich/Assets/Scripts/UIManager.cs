@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
 
     #endregion
 
-    private ItemSelect item;
+    //private ItemSelect item;
 
     private void Start()
     {
@@ -39,19 +39,20 @@ public class UIManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            if (store.item == ItemSelect.barrier)
+            // Select an item
+            if (store.item == ItemSelect.clear)
             {
-                item = ItemSelect.barrier;
-                store.PurchaseBuilding(item);
+
             }
-            else if (store.item == ItemSelect.tower1)
-            {
-                item = ItemSelect.tower1;
-                store.PurchaseBuilding(item);
-            }
-            if (store.item == ItemSelect.sell)
+            // Sell an item
+            else if (store.item == ItemSelect.sell)
             {
                 store.SellBuilding();
+            }
+            // Purchase an item
+            else
+            {
+                store.PurchaseBuilding(store.item);
             }
         }
 

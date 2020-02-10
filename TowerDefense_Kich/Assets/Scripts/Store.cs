@@ -33,27 +33,25 @@ public class Store : MonoBehaviour
             {
                 Node node = hit.collider.gameObject.GetComponent<Node>();
 
-                if (!node.IsOccupied())
+                // Sell existing item
+                if (node.IsOccupied())
                 {
-                    GameObject toBuild = SelectBuilding(item);
-
-                    if (toBuild != null)
-                    {
-                        if (player.CanPurchase(toBuild.GetComponent<Building>().cost))
-                        {
-                            buildManager.Build(node, toBuild);
-
-                            Debug.Log("Purchased " + toBuild.name);
-                        }
-                        else
-                            Debug.Log("Not enough gold");
-                    }
+                    player.SellBuilding(node.building);
+                    buildManager.Sell(node);
                 }
-                else
-                    Debug.Log("Node is occupied");
+
+                GameObject toBuild = SelectBuilding(item);
+
+                if (toBuild != null)
+                {
+                    if (player.CanPurchase(toBuild.GetComponent<Building>().cost))
+                    {
+                        buildManager.Build(node, toBuild);
+                    }
+                    else
+                        Debug.Log("Not enough gold");
+                }
             }
-            else
-                Debug.Log("Cannot place barrier on " + hit.collider.name);
         }
     }
 
@@ -77,8 +75,6 @@ public class Store : MonoBehaviour
                         
                         player.SellBuilding(toSell);
                         buildManager.Sell(node);
-
-                        Debug.Log("Sold " + toSell.name);
                     }
                 }
                 else

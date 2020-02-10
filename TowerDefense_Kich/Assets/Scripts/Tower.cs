@@ -20,7 +20,7 @@ public class Tower : MonoBehaviour
 
     private void Start()
     {
-        criteria = Targeting.closest;
+        criteria = Targeting.first;
         InvokeRepeating("UpdateTarget", 0, 0.5f);
     }
 

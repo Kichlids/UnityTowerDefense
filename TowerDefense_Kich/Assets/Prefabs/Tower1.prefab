@@ -235,6 +235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: 2
+  buildingName: Tower 1
   cost: 10
   sell: 5
 --- !u!114 &-2960446704310336749
