@@ -1,15 +1,28 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine.AI;
+using System.Collections;
 
 // Class handles the beginning and the ending of game
 
 public class GameManager : MonoBehaviour
 {
+    private BuildManager buildManager;
+
+    public NavMeshAgent dummy;
+
     // True when player has no move lives left and game is over
     public static bool isGameOver;
 
     private void Start()
     {
+        buildManager = GetComponent<BuildManager>();
         isGameOver = false;
+
+        dummy.SetDestination(GameObject.FindGameObjectWithTag("Destination").transform.position);
+        dummy.speed = 0;
+
+        StartCoroutine(OnPartialPath());
     }
 
     private void Update()
@@ -19,6 +32,49 @@ public class GameManager : MonoBehaviour
             Debug.Log("Game is over");
             enabled = false;
         }
+
+        if (dummy.pathStatus == NavMeshPathStatus.PathPartial)
+        {
+            StartCoroutine(OnPartialPath());
+        }
+    }
+
+    private IEnumerator OnPartialPath()
+    {
+        print(dummy.pathStatus);
+
+        while (dummy.pathStatus == NavMeshPathStatus.PathPartial)
+        {
+            List<Node> activeNodes = GetActiveNodes();
+
+            if (activeNodes.Count > 0)
+            {
+                int random = Random.Range(0, activeNodes.Count);
+                Node randomNode = activeNodes[random];
+
+                buildManager.Destroy(randomNode);
+                dummy.SetDestination(GameObject.FindGameObjectWithTag("Destination").transform.position);
+            }
+
+            yield return new WaitForSeconds(0.3f);
+        }
+    }
+
+    public List<Node> GetActiveNodes()
+    {
+        List<Node> activeNodes = new List<Node>();
+
+        GameObject[] nodes = GameObject.FindGameObjectsWithTag("Node");
+
+        foreach (GameObject node in nodes)
+        {
+            if (node.GetComponent<Node>().IsOccupied() && node.GetComponent<Node>().GetBuilding() != null)
+            {
+                activeNodes.Add(node.GetComponent<Node>());
+            }
+        }
+
+        return activeNodes;
     }
 
     public void GameOver()

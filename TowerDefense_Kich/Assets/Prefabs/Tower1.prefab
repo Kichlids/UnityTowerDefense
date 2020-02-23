@@ -235,9 +235,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: 2
+  node: {fileID: 0}
   buildingName: Tower 1
   cost: 10
   sell: 5
+  deathEffect: {fileID: 8843493266678649650, guid: 09027b282135afc4e9638379e3a5e84d,
+    type: 3}
 --- !u!114 &-2960446704310336749
 MonoBehaviour:
   m_ObjectHideFlags: 0

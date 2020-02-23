@@ -37,7 +37,7 @@ public class Store : MonoBehaviour
                 if (node.IsOccupied())
                 {
                     player.SellBuilding(node.building);
-                    buildManager.Sell(node);
+                    buildManager.Destroy(node);
                 }
 
                 GameObject toBuild = SelectBuilding(item);
@@ -74,7 +74,7 @@ public class Store : MonoBehaviour
                     {
                         
                         player.SellBuilding(toSell);
-                        buildManager.Sell(node);
+                        buildManager.Destroy(node);
                     }
                 }
                 else

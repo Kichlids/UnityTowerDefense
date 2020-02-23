@@ -13,12 +13,13 @@ GameObject:
   - component: {fileID: 7674297974655595701}
   - component: {fileID: 7674297974655595698}
   - component: {fileID: 2047477503102161082}
+  - component: {fileID: -8966820131545720536}
   m_Layer: 2
   m_Name: Barrier
   m_TagString: Barrier
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &7674297974655595703
 Transform:
@@ -107,6 +108,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: 1
+  node: {fileID: 0}
   buildingName: Barrier
   cost: 5
   sell: 1
+  deathEffect: {fileID: 1896755971981068081, guid: fc77fd448c38ac84bb2fe0643f354d34,
+    type: 3}
+--- !u!114 &-8966820131545720536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7674297974655595699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35e95dc5ff2b64380880dd7ac5922847, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Size: {x: 1.2, y: 3, z: 1.2}
+  m_Center: {x: 0, y: 0, z: 0}
+  m_Area: 1
+  m_AffectedAgents: ffffffff

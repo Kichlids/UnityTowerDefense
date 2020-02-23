@@ -19,8 +19,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - Node
+  - Obstacle
   - 
   - 
   - 
@@ -46,4 +46,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Obstacle
+    uniqueID: 2195540475
     locked: 0
