@@ -10,5 +10,7 @@ public class Building : MonoBehaviour
     public int cost;
     public int sell;
 
+    public int damageDone = 0;
+
     public ParticleSystem deathEffect;
 }

@@ -1,27 +1,66 @@
 ﻿using UnityEngine;
 
-public enum Targeting { closest, farthest, strongest, weakest, first, last}
+// Enumerator that stores targeting priority
+public enum Targeting { first, last, closest, farthest, strongest, weakest }
 
+/*
+ *  Tower class handles targeting all eligible enemies, and attacking them according to its priority
+ *  
+ *  A tower updates its list of enemies, and can have different ways of attacking
+ */
 public class Tower : MonoBehaviour
 {
+    [Header("Tower attributes")]
+
+    // Current target priority
     public Targeting criteria;
 
-    public float range;
-    public int damage = 1;
-    public float firesPerSecond = 1;
+    // Maximum distance between valid enemy and the tower
+    [SerializeField]
+    private float range;
+
+    // Damage dealt per hit
+    [SerializeField]
+    private int damage;
+
+    // Frequency of fires
+    [SerializeField]
+    private float firesPerSecond;
+
+    // Countdown for next fire
     private float fireCooldown = 0;
 
-    private float turnSpeed = 10f;
+    // Time in seconds at which UpdateTarget function begins
+    private const float TARGET_REFRESH_BEGIN = 0f;
+    // Time in seconds at which UpdateTarget function refreshes
+    private const float TARGET_REFRESH_RATE = 0.5f;
 
-    private GameObject target;
+    // Barrel's rotation speed
+    private const float ROTATION_SPEED = 10f;
+
+    [Header("Important GameObjects")]
+
+    // Rotating this gameObject also rotates the projectile spawnpoint
     public GameObject barrel;
+    // Where projectile spawns
     public GameObject projectileSpawn;
+    // Projectile GameObject to be spawned
     public GameObject projectilePrefab;
+
+    // The current enemy being targeted
+    private GameObject target;
+
 
     private void Start()
     {
+        // Set all default values
         criteria = Targeting.first;
-        InvokeRepeating("UpdateTarget", 0, 0.5f);
+        damage = 1;
+        range = 10f;
+        firesPerSecond = 1;
+        
+        // Update target at specified rate
+        InvokeRepeating("UpdateTarget", TARGET_REFRESH_BEGIN, TARGET_REFRESH_RATE);
     }
 
     private void Update()
@@ -39,23 +78,32 @@ public class Tower : MonoBehaviour
         }
     }
 
+    /*
+     *  Rotate the transform component of the barrel gameObject to face the target enemy
+     */
     private void LookAtTarget()
     {
         Vector3 direction = target.transform.position - transform.position;
         Quaternion lookRotation = Quaternion.LookRotation(direction);
-        Vector3 rotation = Quaternion.Lerp(barrel.transform.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
+        Vector3 rotation = Quaternion.Lerp(barrel.transform.rotation, lookRotation, Time.deltaTime * ROTATION_SPEED).eulerAngles;
+
         barrel.transform.rotation = Quaternion.Euler(0, rotation.y, 0);
     }
 
+    /*
+     *  Find all gameObjects that are labeled "enemy" then determine
+     *      the target
+     */
     private void UpdateTarget()
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
-        GetTarget(enemies, criteria);
+        target = GetTarget(enemies, criteria);
     }
 
     private GameObject GetTarget(GameObject[] allEnemies, Targeting crit)
     {
+        GameObject enemyReturn = null;
         GameObject optimalEnemy = null;
 
         if (crit == Targeting.closest)
@@ -74,9 +122,9 @@ public class Tower : MonoBehaviour
             }
 
             if (optimalEnemy != null && optimalDistance <= range)
-                target = optimalEnemy;
+                enemyReturn = optimalEnemy;
             else
-                target = null;
+                enemyReturn = null;
         }
         else if (crit == Targeting.farthest)
         {
@@ -94,9 +142,9 @@ public class Tower : MonoBehaviour
             }
 
             if (optimalEnemy != null)
-                target = optimalEnemy;
+                enemyReturn = optimalEnemy;
             else
-                target = null;
+                enemyReturn = null;
         }
         else if (crit == Targeting.strongest)
         {
@@ -115,9 +163,9 @@ public class Tower : MonoBehaviour
             }
 
             if (optimalEnemy != null)
-                target = optimalEnemy;
+                enemyReturn = optimalEnemy;
             else
-                target = null;
+                enemyReturn = null;
         }
         else if (crit == Targeting.weakest)
         {
@@ -136,9 +184,9 @@ public class Tower : MonoBehaviour
             }
 
             if (optimalEnemy != null)
-                target = optimalEnemy;
+                enemyReturn = optimalEnemy;
             else
-                target = null;
+                enemyReturn = null;
         }
         else if (crit == Targeting.first)
         {
@@ -157,9 +205,9 @@ public class Tower : MonoBehaviour
             }
 
             if (optimalEnemy != null)
-                target = optimalEnemy;
+                enemyReturn = optimalEnemy;
             else
-                target = null;
+                enemyReturn = null;
         }
         else if (crit == Targeting.last)
         {
@@ -178,17 +226,18 @@ public class Tower : MonoBehaviour
             }
 
             if (optimalEnemy != null)
-                target = optimalEnemy;
+                enemyReturn = optimalEnemy;
             else
-                target = null;
+                enemyReturn = null;
         }
 
-        return target;
+        return enemyReturn;
     }
 
     private void Shoot()
     {
         GameObject projectile = Instantiate(projectilePrefab, projectileSpawn.transform.position, projectileSpawn.transform.rotation);
+        projectile.GetComponent<Projectile>().source = GetComponent<Building>();
         projectile.GetComponent<Projectile>().SetDamage(damage);
         projectile.GetComponent<Projectile>().SetTarget(target);
     }

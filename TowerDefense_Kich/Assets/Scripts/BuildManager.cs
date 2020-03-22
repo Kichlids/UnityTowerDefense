@@ -7,11 +7,15 @@ public class BuildManager : MonoBehaviour
 {
     public NavMeshSurface surface;
 
+    private UIManager uiManager;
+
     // A very small amount of time to wait to avoid building before gameobjects inst/destroyed
     private const float waitSecondsBeforeBuildNavmeshSurface = 0.00001f;
 
     private void Start()
     {
+        uiManager = GetComponent<UIManager>();
+
         surface.BuildNavMesh();
     }
 
@@ -27,9 +31,12 @@ public class BuildManager : MonoBehaviour
 
         toInst.GetComponent<Building>().node = node;
 
-        surface.BuildNavMesh();
+        if (toInst.GetComponent<Tower>() != null)
+        {
+            uiManager.lastSelectedTower = toInst.GetComponent<Tower>();
+        }
 
-        //Debug.Log("Built " + name);
+        surface.BuildNavMesh();
     }
 
     public void Destroy(Node node)
@@ -44,8 +51,6 @@ public class BuildManager : MonoBehaviour
         node.SetBuilding(null);
 
         StartCoroutine(RebuildNavmesh());
-
-        //Debug.Log("Destroyed " + name);
     }
 
     private IEnumerator RebuildNavmesh()

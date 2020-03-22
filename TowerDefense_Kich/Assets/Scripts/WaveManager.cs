@@ -13,7 +13,7 @@ public class WaveManager : MonoBehaviour
 
     [Header("Wave Info")]
     private Wave wave;
-    private int waveIndex;
+    public int waveIndex;
     public int numEnemiesAlive;
     public float rateOfSpawn;
     public bool nextWaveReady;

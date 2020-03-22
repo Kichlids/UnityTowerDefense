@@ -28,7 +28,7 @@ public class BaseEnemy : MonoBehaviour
         {
             if (agent.remainingDistance <= agent.stoppingDistance)
             {
-                if (/*!agent.hasPath || */agent.velocity.sqrMagnitude == 0)
+                if (agent.velocity.sqrMagnitude == 0)
                 {
                     return true;
                 }

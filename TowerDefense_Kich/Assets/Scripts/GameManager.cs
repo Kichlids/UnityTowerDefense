@@ -39,12 +39,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void OnGameOver()
+    {
+        Debug.Log("Game is over");
+        enabled = false;
+
+        // TODO: Implement end screen
+    }
+
+    // Checks if there is a valid path from start to destination and reacts accordingly
     private IEnumerator OnPartialPath()
     {
-        print(dummy.pathStatus);
-
         while (dummy.pathStatus == NavMeshPathStatus.PathPartial)
         {
+            Debug.Log(dummy.pathStatus);
+
             List<Node> activeNodes = GetActiveNodes();
 
             if (activeNodes.Count > 0)
@@ -60,6 +69,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Finds all node objects that are active
     public List<Node> GetActiveNodes()
     {
         List<Node> activeNodes = new List<Node>();

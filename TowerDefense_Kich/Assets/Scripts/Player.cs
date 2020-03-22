@@ -19,9 +19,9 @@ public class Player : MonoBehaviour, IDamageable
     {
         gameManager = GetComponent<GameManager>();
 
-        maxHealth = 9999;
+        maxHealth = 30;
         currentHealth = maxHealth;
-        initialGold = 99999999;
+        initialGold = 9999;
         currentGold = initialGold;
 
         time = 0;
