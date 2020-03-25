@@ -6,19 +6,28 @@ public class Store : MonoBehaviour
 {
     public ItemSelect item;
 
-    private BuildManager buildManager;
-    private Player player;
-
     public GameObject barrierPrefab;
     public GameObject tower1Prefab;
 
     private const float RAYDIST = 1000f;
 
+
+    public static Store _instance;
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
+
     private void Start()
     {
-        buildManager = GetComponent<BuildManager>();
-        player = GetComponent<Player>();
-
         item = ItemSelect.clear;
     }
 
@@ -36,17 +45,20 @@ public class Store : MonoBehaviour
                 // Sell existing item
                 if (node.IsOccupied())
                 {
-                    player.SellBuilding(node.building);
-                    buildManager.Destroy(node);
+                    Player._instance.SellBuilding(node.buildingObject);
+                    BuildManager._instance.Destroy(node);
                 }
 
                 GameObject toBuild = SelectBuilding(item);
 
                 if (toBuild != null)
                 {
-                    if (player.CanPurchase(toBuild.GetComponent<Building>().cost))
+                    int cost = toBuild.GetComponent<Building>().cost;
+
+                    if (Player._instance.CanPurchase(cost))
                     {
-                        buildManager.Build(node, toBuild);
+                        Player._instance.Purchase(cost);
+                        BuildManager._instance.Build(node, toBuild);
                     }
                     else
                         Debug.Log("Not enough gold");
@@ -68,13 +80,12 @@ public class Store : MonoBehaviour
 
                 if (node.IsOccupied())
                 {
-                    GameObject toSell = node.GetBuilding();
+                    GameObject toSell = node.GetBuildingObject();
 
                     if (toSell != null)
                     {
-                        
-                        player.SellBuilding(toSell);
-                        buildManager.Destroy(node);
+                        Player._instance.SellBuilding(toSell);
+                        BuildManager._instance.Destroy(node);
                     }
                 }
                 else

@@ -7,16 +7,28 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-    private BuildManager buildManager;
-
     public NavMeshAgent dummy;
 
     // True when player has no move lives left and game is over
     public static bool isGameOver;
 
+
+    public static GameManager _instance;
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        { 
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
+
     private void Start()
     {
-        buildManager = GetComponent<BuildManager>();
         isGameOver = false;
 
         dummy.SetDestination(GameObject.FindGameObjectWithTag("Destination").transform.position);
@@ -61,7 +73,7 @@ public class GameManager : MonoBehaviour
                 int random = Random.Range(0, activeNodes.Count);
                 Node randomNode = activeNodes[random];
 
-                buildManager.Destroy(randomNode);
+                BuildManager._instance.Destroy(randomNode);
                 dummy.SetDestination(GameObject.FindGameObjectWithTag("Destination").transform.position);
             }
 
@@ -78,7 +90,7 @@ public class GameManager : MonoBehaviour
 
         foreach (GameObject node in nodes)
         {
-            if (node.GetComponent<Node>().IsOccupied() && node.GetComponent<Node>().GetBuilding() != null)
+            if (node.GetComponent<Node>().IsOccupied() && node.GetComponent<Node>().GetBuildingObject() != null)
             {
                 activeNodes.Add(node.GetComponent<Node>());
             }

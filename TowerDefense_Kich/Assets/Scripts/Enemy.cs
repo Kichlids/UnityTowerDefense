@@ -32,13 +32,13 @@ public class Enemy : BaseEnemy, IDamageable
         if (isDead)
         {
             Destroy(gameObject);
-            player.LootEnemy(gold);
+            Player._instance.LootEnemy(gold);
             return;
         }
         if (HasReachedDestination())
         {
             Destroy(gameObject);
-            player.TakeDamage(currentHealth);
+            Player._instance.TakeDamage(currentHealth);
             return;
         }
     }

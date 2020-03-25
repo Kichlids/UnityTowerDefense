@@ -109,9 +109,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: 1
   node: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 012918df8a5ac374eb185af3079ec333, type: 3}
   buildingName: Barrier
   cost: 5
   sell: 1
+  damageDone: 0
   deathEffect: {fileID: 1896755971981068081, guid: fc77fd448c38ac84bb2fe0643f354d34,
     type: 3}
 --- !u!114 &-8966820131545720536

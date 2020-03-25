@@ -19,6 +19,20 @@ public class WaveManager : MonoBehaviour
     public bool nextWaveReady;
     public bool waveInProgress;
 
+    public static WaveManager _instance;
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
+
     private void Start()
     {
         waveIndex = 0;

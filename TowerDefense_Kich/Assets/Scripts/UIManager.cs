@@ -12,10 +12,6 @@ using System.Linq;
 
 public class UIManager : MonoBehaviour
 {
-    private Player player;
-    private Store store;
-    private WaveManager waveManager;
-
     #region UI objects
 
     public TextMeshProUGUI livesTxt;
@@ -36,13 +32,23 @@ public class UIManager : MonoBehaviour
 
     private const float RAY_DIST = 1000f;
 
+
+    public static UIManager _instance;
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
+
     private void Start()
     {
-        // Get neccessary components
-        player = GetComponent<Player>();
-        store = GetComponent<Store>();
-        waveManager = GetComponent<WaveManager>();
-
         targetDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
 
         InitializeBuildingPanel();
@@ -55,23 +61,23 @@ public class UIManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             // Select an item
-            if (store.item == ItemSelect.clear)
+            if (Store._instance.item == ItemSelect.clear)
             {
                 DisplayBuildingPanel();
             }
             // Sell an item
-            else if (store.item == ItemSelect.sell)
+            else if (Store._instance.item == ItemSelect.sell)
             {
-                store.SellBuilding();
+                Store._instance.SellBuilding();
             }
             // Purchase an item
             else
             {
-                store.PurchaseBuilding(store.item);
+                Store._instance.PurchaseBuilding(Store._instance.item);
             }
         }
 
-        if (waveManager.waveInProgress)
+        if (WaveManager._instance.waveInProgress)
             nextWaveBtn.gameObject.SetActive(false);
         else
             nextWaveBtn.gameObject.SetActive(true);
@@ -80,9 +86,9 @@ public class UIManager : MonoBehaviour
     // Update player information
     private void UpdatePlayerInfo()
     {
-        livesTxt.text = "Lives: " + player.GetLives();
-        goldTxt.text = "Gold: " + player.GetGold();
-        waveTxt.text = "Wave: " + waveManager.GetWaveIndex();
+        livesTxt.text = "Lives: " + Player._instance.GetLives();
+        goldTxt.text = "Gold: " + Player._instance.GetGold();
+        waveTxt.text = "Wave: " + WaveManager._instance.GetWaveIndex();
     }
 
     private void DisplayBuildingPanel()
@@ -100,12 +106,13 @@ public class UIManager : MonoBehaviour
                 Building buildingComponent = null;
                 Tower towerComponent = null;
 
-                if ((nodeBuildingGameObject = node.GetBuilding()) != null)
+                if ((nodeBuildingGameObject = node.GetBuildingObject()) != null)
                 {
                     if ((buildingComponent = nodeBuildingGameObject.GetComponent<Building>()) != null)
                     {
                         damageCountTxt.text = buildingComponent.damageDone.ToString();
                         sellCostTxt.text = buildingComponent.sell.ToString();
+                        buildingImage.sprite = buildingComponent.sprite;
 
                         if ((towerComponent = nodeBuildingGameObject.GetComponent<Tower>()) != null)
                         {
@@ -179,31 +186,31 @@ public class UIManager : MonoBehaviour
     // Move to next wave when ready
     public void OnNextWaveBtn()
     {
-        if (!waveManager.waveInProgress)
-            waveManager.nextWaveReady = true;
+        if (!WaveManager._instance.waveInProgress)
+            WaveManager._instance.nextWaveReady = true;
     }
 
     // Set item selected to none
     public void OnCancelBtn()
     {
-        store.item = ItemSelect.clear;
+        Store._instance.item = ItemSelect.clear;
     }
 
     // Set item selected to barrier
     public void OnBarrierBtn()
     {
-        store.item = ItemSelect.barrier;
+        Store._instance.item = ItemSelect.barrier;
     }
 
     public void OnTower1Btn()
     {
-        store.item = ItemSelect.tower1;
+        Store._instance.item = ItemSelect.tower1;
     }
 
     // Sell item option
     public void OnSellBtn()
     {
-        store.item = ItemSelect.sell;
+        Store._instance.item = ItemSelect.sell;
     }
 
     #endregion

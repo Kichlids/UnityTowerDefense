@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-// Class that holds information about a wave
 
 public class Wave
 {

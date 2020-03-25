@@ -2,24 +2,34 @@
 
 public class Player : MonoBehaviour, IDamageable
 {
-    private GameManager gameManager;
+    public int maxHealth;
+    public int currentHealth;
+    public int initialGold;
+    public int currentGold;
 
-    private int maxHealth;
-    private int currentHealth;
-    private int initialGold;
-    private int currentGold;
-
-    private int passiveIncome = 5;
-    private int passiveIncomeRateInSeconds = 5;
+    public int passiveIncome = 5;
+    public int passiveIncomeRateInSeconds = 5;
     private float time;
 
-    private bool isDead;
+    public bool isDead;
+
+    public static Player _instance;
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
 
     private void Start()
     {
-        gameManager = GetComponent<GameManager>();
-
-        maxHealth = 30;
+        maxHealth = 1;
         currentHealth = maxHealth;
         initialGold = 9999;
         currentGold = initialGold;
@@ -41,7 +51,7 @@ public class Player : MonoBehaviour, IDamageable
 
         if (isDead)
         {
-            gameManager.GameOver();
+            GameManager._instance.GameOver();
         }
     }
 
@@ -49,13 +59,12 @@ public class Player : MonoBehaviour, IDamageable
     {
         int after = currentGold - cost;
 
-        if (after >= 0)
-        {
-            currentGold = after;
-            return true;
-        }
+        return after >= 0;
+    }
 
-        return false;
+    public void Purchase(int cost)
+    {
+        currentGold -= cost;
     }
 
     public void SellBuilding(GameObject building)

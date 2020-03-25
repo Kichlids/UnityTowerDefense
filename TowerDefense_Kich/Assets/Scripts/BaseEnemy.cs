@@ -5,17 +5,12 @@ using UnityEngine.AI;
 
 public class BaseEnemy : MonoBehaviour
 {
-    public Player player;
-    public WaveManager waveManager;
-    public BuildManager buildManager;
-    public NavMeshAgent agent;
     public GameObject spawn;
     public GameObject destination;
+    public NavMeshAgent agent;
 
     public void Start()
     {
-        player = GameObject.FindGameObjectWithTag("GameManager").GetComponent<Player>();
-        waveManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<WaveManager>();
         spawn = GameObject.FindGameObjectWithTag("Spawn");
         destination = GameObject.FindGameObjectWithTag("Destination");
 
@@ -39,6 +34,6 @@ public class BaseEnemy : MonoBehaviour
 
     public void OnDestroy()
     {
-        waveManager.numEnemiesAlive--;
+        WaveManager._instance.numEnemiesAlive--;
     }
 }

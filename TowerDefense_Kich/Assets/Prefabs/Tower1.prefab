@@ -236,9 +236,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: 2
   node: {fileID: 0}
+  sprite: {fileID: 21300000, guid: 2fefaabbb2531144c9bf6eed1ab6ba8c, type: 3}
   buildingName: Tower 1
   cost: 10
   sell: 5
+  damageDone: 0
   deathEffect: {fileID: 8843493266678649650, guid: 09027b282135afc4e9638379e3a5e84d,
     type: 3}
 --- !u!114 &-2960446704310336749

@@ -7,15 +7,26 @@ public class BuildManager : MonoBehaviour
 {
     public NavMeshSurface surface;
 
-    private UIManager uiManager;
-
     // A very small amount of time to wait to avoid building before gameobjects inst/destroyed
     private const float waitSecondsBeforeBuildNavmeshSurface = 0.00001f;
 
+
+    public static BuildManager _instance;
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+    }
+
     private void Start()
     {
-        uiManager = GetComponent<UIManager>();
-
         surface.BuildNavMesh();
     }
 
@@ -27,13 +38,13 @@ public class BuildManager : MonoBehaviour
         string name = toInst.GetComponent<Building>().buildingName;
 
         node.SetOccupied(true);
-        node.SetBuilding(toInst);
+        node.SetBuildingObject(toInst);
 
         toInst.GetComponent<Building>().node = node;
 
         if (toInst.GetComponent<Tower>() != null)
         {
-            uiManager.lastSelectedTower = toInst.GetComponent<Tower>();
+            UIManager._instance.lastSelectedTower = toInst.GetComponent<Tower>();
         }
 
         surface.BuildNavMesh();
@@ -41,14 +52,14 @@ public class BuildManager : MonoBehaviour
 
     public void Destroy(Node node)
     {
-        GameObject toSell = node.GetBuilding();
+        GameObject toSell = node.GetBuildingObject();
         string name = toSell.GetComponent<Building>().buildingName;
 
         
         Destroy(Instantiate(toSell.GetComponent<Building>().deathEffect.gameObject, toSell.transform.position, Quaternion.Euler(-90, 0, 0)) as GameObject, 2);
         Destroy(toSell);
         node.SetOccupied(false);
-        node.SetBuilding(null);
+        node.SetBuildingObject(null);
 
         StartCoroutine(RebuildNavmesh());
     }

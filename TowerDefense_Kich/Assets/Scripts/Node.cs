@@ -3,8 +3,8 @@
 public class Node : MonoBehaviour
 {
     private Vector3 buildPosition;
-    public bool isOccupied;
-    public GameObject building;
+    private bool isOccupied;
+    public GameObject buildingObject;
 
     private void Start()
     {
@@ -27,13 +27,13 @@ public class Node : MonoBehaviour
         isOccupied = set;
     }
 
-    public void SetBuilding(GameObject toSet)
+    public void SetBuildingObject(GameObject toSet)
     {
-        building = toSet;
+        buildingObject = toSet;
     }
 
-    public GameObject GetBuilding()
+    public GameObject GetBuildingObject()
     {
-        return building;
+        return buildingObject;
     }
 }
