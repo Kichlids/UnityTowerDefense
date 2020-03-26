@@ -24,11 +24,13 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI sellCostTxt;
     public TMP_Dropdown targetDropdown;
 
+    public GameObject targetGroup;
+
     public Button nextWaveBtn;
 
     #endregion
 
-    public Tower lastSelectedTower = null;
+    public GameObject lastSelectedBuilding = null;
 
     private const float RAY_DIST = 1000f;
 
@@ -56,14 +58,15 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        UpdatePlayerInfo();
+        DisplayPlayerInfoPanel();
+        DisplayBuildingInfoPanel(lastSelectedBuilding);
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             // Select an item
             if (Store._instance.item == ItemSelect.clear)
             {
-                DisplayBuildingPanel();
+                SelectBuilding();
             }
             // Sell an item
             else if (Store._instance.item == ItemSelect.sell)
@@ -84,14 +87,14 @@ public class UIManager : MonoBehaviour
     }
 
     // Update player information
-    private void UpdatePlayerInfo()
+    private void DisplayPlayerInfoPanel()
     {
         livesTxt.text = "Lives: " + Player._instance.GetLives();
         goldTxt.text = "Gold: " + Player._instance.GetGold();
         waveTxt.text = "Wave: " + WaveManager._instance.GetWaveIndex();
     }
 
-    private void DisplayBuildingPanel()
+    private void SelectBuilding()
     {
         Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
         Ray ray = Camera.main.ScreenPointToRay(mousePosition);
@@ -102,35 +105,35 @@ public class UIManager : MonoBehaviour
             {
                 Node node = hit.collider.gameObject.GetComponent<Node>();
 
-                GameObject nodeBuildingGameObject = null;
-                Building buildingComponent = null;
-                Tower towerComponent = null;
-
-                if ((nodeBuildingGameObject = node.GetBuildingObject()) != null)
+                if (node.buildingObject != null)
                 {
-                    if ((buildingComponent = nodeBuildingGameObject.GetComponent<Building>()) != null)
-                    {
-                        damageCountTxt.text = buildingComponent.damageDone.ToString();
-                        sellCostTxt.text = buildingComponent.sell.ToString();
-                        buildingImage.sprite = buildingComponent.sprite;
+                    lastSelectedBuilding = node.buildingObject;
+                }
+            }
+        }
+    }
 
-                        if ((towerComponent = nodeBuildingGameObject.GetComponent<Tower>()) != null)
-                        {
-                            lastSelectedTower = towerComponent;
+    private void DisplayBuildingInfoPanel(GameObject _lastSelectedBuilding)
+    {
+        if (_lastSelectedBuilding != null)
+        {
+            Building buildingComponent;
+            if ((buildingComponent = _lastSelectedBuilding.GetComponent<Building>()) != null)
+            {
+                damageCountTxt.text = buildingComponent.damageDone.ToString();
+                sellCostTxt.text = buildingComponent.sell.ToString();
+                buildingImage.sprite = buildingComponent.sprite;
 
-                            int buildingPrio = SelectTargetEnum(towerComponent.criteria);
-                            targetDropdown.value = buildingPrio;
-                        }
-                    }
-                    else
-                    {
-                        damageCountTxt.text = "";
-                        sellCostTxt.text = "";
-                    }
+                Tower towerComponent;
+                if (_lastSelectedBuilding.tag == "Tower" && (towerComponent = _lastSelectedBuilding.GetComponent<Tower>()) != null)
+                {
+                    targetGroup.SetActive(true);
+                    int buildingPrio = SelectTargetEnum(towerComponent.targeting);
+                    targetDropdown.value = buildingPrio;
                 }
                 else
                 {
-                    lastSelectedTower = null;
+                    targetGroup.SetActive(false);
                 }
             }
         }
@@ -170,13 +173,10 @@ public class UIManager : MonoBehaviour
 
     public void OnDropdownValueChanged(int prio)
     {
-        print("changed to " + prio);
-        if (lastSelectedTower != null)
+        if (lastSelectedBuilding.tag == "Tower")
         {
             List<Targeting> targetList = Enum.GetValues(typeof(Targeting)).Cast<Targeting>().ToList();
-
-            lastSelectedTower.criteria = targetList[prio];
-            print("New criteria: " + lastSelectedTower.criteria);
+            lastSelectedBuilding.GetComponent<Tower>().targeting = targetList[prio];
         }
     }
 

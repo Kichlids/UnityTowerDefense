@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: -2960446704310336749}
   m_Layer: 2
   m_Name: Tower1
-  m_TagString: Untagged
+  m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -255,7 +255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7348190b4ce986944bf4a73893b6d9d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  criteria: 4
+  targeting: 0
   range: 10
   damage: 1
   firesPerSecond: 5

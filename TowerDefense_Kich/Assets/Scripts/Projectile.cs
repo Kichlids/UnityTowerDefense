@@ -5,7 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     private GameObject target;
-    public Building source;
+    private Building source;
     private float speed = 100f;
     private int damage = 1;
 
@@ -28,6 +28,13 @@ public class Projectile : MonoBehaviour
 
         transform.Translate(direction.normalized * dist, Space.World);
         transform.LookAt(target.transform);
+    }
+
+    public void Initialize(Building _source, int _damage, GameObject _target)
+    {
+        source = _source;
+        damage = _damage;
+        target = _target;
     }
 
     private void CollideTarget()

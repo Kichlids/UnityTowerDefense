@@ -2,15 +2,19 @@
 using UnityEngine.AI;
 using System.Collections.Generic;
 
+// An Enemy class that extends from the base class
+
 public class Enemy : BaseEnemy, IDamageable
 {
     public int maxHealth = 10;
-    private int currentHealth;
     public float speed = 1f;
-
     public int gold = 1;
-
     private float agentStoppingDistance = 2f;
+
+    private int currentHealth;
+
+
+
 
     private bool isDead;
 

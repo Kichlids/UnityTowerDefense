@@ -34,30 +34,25 @@ public class BuildManager : MonoBehaviour
     {
         Vector3 position = node.GetBuildPosition();
 
-        GameObject toInst = Instantiate(building, position, Quaternion.identity);
-        string name = toInst.GetComponent<Building>().buildingName;
+        GameObject buildingObject = Instantiate(building, position, Quaternion.identity);
 
         node.SetOccupied(true);
-        node.SetBuildingObject(toInst);
+        node.SetBuildingObject(buildingObject);
 
-        toInst.GetComponent<Building>().node = node;
+        buildingObject.GetComponent<Building>().node = node;
 
-        if (toInst.GetComponent<Tower>() != null)
-        {
-            UIManager._instance.lastSelectedTower = toInst.GetComponent<Tower>();
-        }
+        UIManager._instance.lastSelectedBuilding = building;
 
         surface.BuildNavMesh();
     }
 
     public void Destroy(Node node)
     {
-        GameObject toSell = node.GetBuildingObject();
-        string name = toSell.GetComponent<Building>().buildingName;
-
+        GameObject buildingToSell = node.GetBuildingObject();
         
-        Destroy(Instantiate(toSell.GetComponent<Building>().deathEffect.gameObject, toSell.transform.position, Quaternion.Euler(-90, 0, 0)) as GameObject, 2);
-        Destroy(toSell);
+        Destroy(Instantiate(buildingToSell.GetComponent<Building>().deathEffect.gameObject, buildingToSell.transform.position, Quaternion.Euler(-90, 0, 0)) as GameObject, 2);
+        Destroy(buildingToSell);
+
         node.SetOccupied(false);
         node.SetBuildingObject(null);
 

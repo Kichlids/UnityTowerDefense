@@ -13,7 +13,7 @@ public class Tower : MonoBehaviour
     [Header("Tower attributes")]
 
     // Current target priority
-    public Targeting criteria;
+    public Targeting targeting;
 
     // Maximum distance between valid enemy and the tower
     [SerializeField]
@@ -54,7 +54,7 @@ public class Tower : MonoBehaviour
     private void Start()
     {
         // Set all default values
-        criteria = Targeting.first;
+        targeting = Targeting.first;
         damage = 1;
         range = 10f;
         firesPerSecond = 1;
@@ -98,15 +98,15 @@ public class Tower : MonoBehaviour
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
-        target = GetTarget(enemies, criteria);
+        target = GetTarget(enemies, targeting);
     }
 
-    private GameObject GetTarget(GameObject[] allEnemies, Targeting crit)
+    private GameObject GetTarget(GameObject[] allEnemies, Targeting _targeting)
     {
         GameObject enemyReturn = null;
         GameObject optimalEnemy = null;
 
-        if (crit == Targeting.closest)
+        if (_targeting == Targeting.closest)
         {
             float optimalDistance = Mathf.Infinity;
 
@@ -126,7 +126,7 @@ public class Tower : MonoBehaviour
             else
                 enemyReturn = null;
         }
-        else if (crit == Targeting.farthest)
+        else if (_targeting == Targeting.farthest)
         {
             float optimalDistance = -Mathf.Infinity;
 
@@ -146,7 +146,7 @@ public class Tower : MonoBehaviour
             else
                 enemyReturn = null;
         }
-        else if (crit == Targeting.strongest)
+        else if (_targeting == Targeting.strongest)
         {
             float optimalEnemyHealth = -Mathf.Infinity;
 
@@ -167,7 +167,7 @@ public class Tower : MonoBehaviour
             else
                 enemyReturn = null;
         }
-        else if (crit == Targeting.weakest)
+        else if (_targeting == Targeting.weakest)
         {
             float optimalEnemyHealth = Mathf.Infinity;
 
@@ -188,7 +188,7 @@ public class Tower : MonoBehaviour
             else
                 enemyReturn = null;
         }
-        else if (crit == Targeting.first)
+        else if (_targeting == Targeting.first)
         {
             float optimalDist = Mathf.Infinity;
 
@@ -209,7 +209,7 @@ public class Tower : MonoBehaviour
             else
                 enemyReturn = null;
         }
-        else if (crit == Targeting.last)
+        else if (_targeting == Targeting.last)
         {
             float optimalDist = -Mathf.Infinity;
 
@@ -237,9 +237,7 @@ public class Tower : MonoBehaviour
     private void Shoot()
     {
         GameObject projectile = Instantiate(projectilePrefab, projectileSpawn.transform.position, projectileSpawn.transform.rotation);
-        projectile.GetComponent<Projectile>().source = GetComponent<Building>();
-        projectile.GetComponent<Projectile>().SetDamage(damage);
-        projectile.GetComponent<Projectile>().SetTarget(target);
+        projectile.GetComponent<Projectile>().Initialize(GetComponent<Building>(), damage, target);
     }
 
     private void OnDrawGizmos()

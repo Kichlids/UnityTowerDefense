@@ -27,9 +27,9 @@ public class Node : MonoBehaviour
         isOccupied = set;
     }
 
-    public void SetBuildingObject(GameObject toSet)
+    public void SetBuildingObject(GameObject _buildingObject)
     {
-        buildingObject = toSet;
+        buildingObject = _buildingObject;
     }
 
     public GameObject GetBuildingObject()
