@@ -98,5 +98,4 @@ public class WaveManager : MonoBehaviour
     {
         return waveIndex;
     }
-
 }

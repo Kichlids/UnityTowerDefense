@@ -13,9 +13,6 @@ public class Enemy : BaseEnemy, IDamageable
 
     private int currentHealth;
 
-
-
-
     private bool isDead;
 
     protected new void Start()

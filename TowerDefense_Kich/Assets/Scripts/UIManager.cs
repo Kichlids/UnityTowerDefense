@@ -80,7 +80,7 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        if (WaveManager._instance.waveInProgress)
+        if (WaveManager._instance.waveInProgress || GameManager.isGameOver)
             nextWaveBtn.gameObject.SetActive(false);
         else
             nextWaveBtn.gameObject.SetActive(true);
