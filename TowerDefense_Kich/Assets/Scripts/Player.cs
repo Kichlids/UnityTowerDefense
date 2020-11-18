@@ -29,9 +29,9 @@ public class Player : MonoBehaviour, IDamageable
 
     private void Start()
     {
-        maxHealth = 1;
+        //maxHealth = 1;
         currentHealth = maxHealth;
-        initialGold = 9999;
+        //initialGold = 9999;
         currentGold = initialGold;
 
         time = 0;
